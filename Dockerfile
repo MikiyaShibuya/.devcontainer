@@ -35,10 +35,15 @@ RUN HOMEDIR=$(eval echo ~$USER) \
      && git checkout FETCH_HEAD" \
   && cd $WORKDIR && USER=$USER ./install.sh
 
+RUN su $USER -c \
+    "python3 -m venv --system-site-packages --clear \
+        --prompt 'dev-container' \
+        --upgrade-deps ~/.local/share/.venv" \
+  && echo 'source $HOME/.local/share/.venv/bin/activate' >> /home/$USER/.zshrc
+
 
 ENV LANG=en_US.UTF-8
 ENV USER=$USER
-
 
 COPY entrypoint.sh /tmp/entrypoint.sh
 CMD ["/tmp/entrypoint.sh"]
