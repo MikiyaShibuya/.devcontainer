@@ -1,0 +1,17 @@
+services:
+  dotfiles:
+    build:
+      args:
+        - USER=$USER
+        - GID=$G
+        - UID=$U
+      context: .
+    environment:
+      - SSH_PORT=${SSH_PORT:-2222}
+    ports:
+      - :${SSH_PORT:-2222}:${SSH_PORT:-2222}
+    volumes:
+      - ./.cache:/home/$USER/.local/share/container-cache
+      - ..:/home/$USER/repo
+    privileged: true
+    tty: true
