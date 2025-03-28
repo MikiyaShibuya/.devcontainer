@@ -15,6 +15,8 @@ ln -sfn $CACHE_DIR/p10k /home/shibuya/.cache/p10k
 su $USER -c "mkdir -p $CACHE_DIR/github-copilot"
 ln -sfn $CACHE_DIR/github-copilot /home/shibuya/.config/github-copilot
 
+/tmp/build_depend.sh
+
 # Change SSH Port
 sed -i "s/#Port 22/Port ${SSH_PORT}/" /etc/ssh/sshd_config \
   && sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config \

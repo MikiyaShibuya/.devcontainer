@@ -35,15 +35,26 @@ RUN HOMEDIR=$(eval echo ~$USER) \
      && git checkout FETCH_HEAD" \
   && cd $WORKDIR && USER=$USER ./install.sh
 
-RUN su $USER -c \
+COPY .cache/python3 /home/$USER/.local/share/container-cache/python3
+
+RUN VENV_DIR=/home/$USER/.local/.venv \
+  && su $USER -c \
     "python3 -m venv --system-site-packages --clear \
         --prompt 'dev-container' \
-        --upgrade-deps ~/.local/share/.venv" \
-  && echo 'source $HOME/.local/share/.venv/bin/activate' >> /home/$USER/.zshrc
+        --upgrade-deps $VENV_DIR" \
+  && echo "source $VENV_DIR/bin/activate" >> /home/$USER/.zshrc
+
+RUN REQS_PATH=/home/$USER/.local/share/container-cache/python3/requirements.txt \
+  && if [ -f "$REQS_PATH" ]; then su $USER -c \
+    "source $VENV_DIR/bin/activate \
+      && pip install --upgrade pip \
+      && pip install -r $REQS_PATH" \
+     ;fi
 
 
 ENV LANG=en_US.UTF-8
 ENV USER=$USER
 
+COPY build_depend.sh /tmp/build_depend.sh
 COPY entrypoint.sh /tmp/entrypoint.sh
 CMD ["/tmp/entrypoint.sh"]
