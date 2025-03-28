@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CACHE_DIR=/home/$USER/.local/share/container-cache
+CACHE_DIR=/home/$USER/.container-cache
 chmod 777 $CACHE_DIR
 
 su $USER -c "mkdir -p $CACHE_DIR/nvim-tmp"

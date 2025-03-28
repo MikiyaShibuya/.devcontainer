@@ -11,7 +11,8 @@ services:
     ports:
       - :${SSH_PORT:-2222}:${SSH_PORT:-2222}
     volumes:
-      - ./.cache:/home/$USER/.local/share/container-cache
+      - ./.cache:/home/$USER/.container-cache
+      - ./.ro-cache:/home/$USER/.ro-container-cache
       - ..:/home/$USER/repo
     privileged: true
     tty: true
