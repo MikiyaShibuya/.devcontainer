@@ -55,6 +55,7 @@ RUN REQS_PATH=/tmp/.ro-cache/requirements.txt && \
 ENV LANG=en_US.UTF-8
 ENV USER=$USER
 
-COPY build_depend.sh /tmp/build_depend.sh
+COPY install_depend.sh /tmp/install_depend.sh
 COPY entrypoint.sh /tmp/entrypoint.sh
 CMD ["/tmp/entrypoint.sh"]
+

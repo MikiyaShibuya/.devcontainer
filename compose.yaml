@@ -14,5 +14,6 @@ services:
       - ./.cache:/home/$USER/.container-cache
       - ./.ro-cache:/home/$USER/.ro-container-cache
       - ..:/home/$USER/repo
+      - /home/$USER/.ssh:/tmp/.host-ssh:ro
     privileged: true
     tty: true

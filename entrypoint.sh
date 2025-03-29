@@ -15,13 +15,24 @@ ln -sfn $CACHE_DIR/p10k /home/shibuya/.cache/p10k
 su $USER -c "mkdir -p $CACHE_DIR/github-copilot"
 ln -sfn $CACHE_DIR/github-copilot /home/shibuya/.config/github-copilot
 
-/tmp/build_depend.sh
+/tmp/install_depend.sh
 
-# Change SSH Port
+# Save the installed python packages to a file.
+# This will be used in the next container build
+RO_CACHE_DIR=/home/$USER/.ro-container-cache
+REQS_PATH=$RO_CACHE_DIR/requirements.txt
+su $USER -c "source ~/.zshrc && pip freeze > $REQS_PATH"
+chown root $RO_CACHE_DIR && chmod 755 $RO_CACHE_DIR
+
+
+# Change SSH Port, allow root login
 sed -i "s/#Port 22/Port ${SSH_PORT}/" /etc/ssh/sshd_config \
-  && sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config \
-  && sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+  && sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
+# Apply SSH authorized keys from host PC
+su $USER -c "cp /tmp/.host-ssh/authorized_keys /home/$USER/.ssh/authorized_keys"
+
+# Start SSH server
 service ssh start &> /dev/null
 
 SSH_OK=$?
