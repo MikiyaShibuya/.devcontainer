@@ -2,6 +2,7 @@
 
 CACHE_DIR=/home/$USER/.container-cache
 chmod 777 $CACHE_DIR
+chown $USER $CACHE_DIR
 
 su $USER -c "mkdir -p $CACHE_DIR/nvim-tmp"
 ln -sfn $CACHE_DIR/nvim-tmp /home/$USER/.config/nvim/tmp
@@ -20,6 +21,7 @@ ln -sfn $CACHE_DIR/github-copilot /home/shibuya/.config/github-copilot
 # Save the installed python packages to a file.
 # This will be used in the next container build
 RO_CACHE_DIR=/home/$USER/.ro-container-cache
+chown $USER $RO_CACHE_DIR
 REQS_PATH=$RO_CACHE_DIR/requirements.txt
 su $USER -c "source ~/.zshrc && pip freeze > $REQS_PATH"
 chown root $RO_CACHE_DIR && chmod 755 $RO_CACHE_DIR

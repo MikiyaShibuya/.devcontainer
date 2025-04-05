@@ -6,7 +6,9 @@ RUN apt-get update \
   && apt-get install --no-install-recommends -y \
     sudo unzip curl git \
     zsh openssh-server locales-all lsb-release \
-    ca-certificates
+    ca-certificates && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # User setting
 ARG GID
@@ -34,6 +36,14 @@ RUN HOMEDIR=$(eval echo ~$USER) \
      && git fetch --depth 1 origin f41996def7298f7cc66efcca2ab03de101dea004 \
      && git checkout FETCH_HEAD" \
   && cd $WORKDIR && USER=$USER ./install.sh
+
+# Install target depend modules
+COPY apt_depend.txt /tmp/apt_depend.txt
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends $(cat /tmp/apt_depend.txt | sed -e '/^\s*#/d' -e 's/\s*#.*//' | tr "\n" " ") && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 
 COPY .ro-cache /tmp/.ro-cache
 
