@@ -1,3 +1,4 @@
 .cache/
 .ro-cache/requirements.txt
 .DS_Store
+.env

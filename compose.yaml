@@ -1,5 +1,7 @@
+name: ${PROJECT_NAME:?** PROJECT_NAME is required **}
 services:
-  dotfiles:
+  devcontainer:
+    container_name: ${PROJECT_NAME}-dev
     build:
       args:
         - USER=$USER
